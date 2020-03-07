@@ -121,7 +121,7 @@ if __name__ == "__main__":
         timecodes = []
 
         nownow = datetime.datetime.now()
-        nowHour = nownow.hour()
+        nowHour = nownow.hour
 
         while True:
             values = cmd_query_data()
@@ -130,15 +130,15 @@ if __name__ == "__main__":
             if values is not None and len(values) == 2:
                 pm25.append(values[0])
                 pm10.append(values[1])
-                timecodes.append(currentNow.minute() + ":" + currentNow.second())
+                timecodes.append(currentNow.minute + ":" + currentNow.second)
                 print("PM2.5: ", values[0], ", PM10: ", values[1])
                 time.sleep(10)
               
-            currentHour = currentNow.hour()
+            currentHour = currentNow.hour
             if nowHour != currentHour:
                 break
 
-        fileName = JSON_FILE + nownow.day() + "-" + nownow.month() + "-" + nownow.year() + "-" + nownow.hour + ".json"
+        fileName = JSON_FILE + nownow.day + "-" + nownow.month + "-" + nownow.year + "-" + nownow.hour + ".json"
 
         jsonData = []
         counter = 0
