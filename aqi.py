@@ -130,7 +130,7 @@ if __name__ == "__main__":
             if values is not None and len(values) == 2:
                 pm25.append(values[0])
                 pm10.append(values[1])
-                timecodes.append(currentNow.minute + ":" + currentNow.second)
+                timecodes.append(str(currentNow.minute) + ":" + str(currentNow.second))
                 print("PM2.5: ", values[0], ", PM10: ", values[1])
                 time.sleep(10)
               
@@ -138,12 +138,12 @@ if __name__ == "__main__":
             if nowHour != currentHour:
                 break
 
-        fileName = JSON_FILE + nownow.day + "-" + nownow.month + "-" + nownow.year + "-" + nownow.hour + ".json"
+        fileName = JSON_FILE + str(nownow.day) + "-" + str(nownow.month) + "-" + str(nownow.year) + "-" + str(nownow.hour) + ".json"
 
         jsonData = []
         counter = 0
         for i in timecodes: 
-            jsonrow = {'pm25': pm25[counter], 'pm10': pm10[counter], 'time': timecodes[counter]}
+            jsonrow = {'pm25': str(pm25[counter]), 'pm10': str(pm10[counter]), 'time': timecodes[counter]}
             jsonData.append(jsonrow)
             counter = counter + 1
 
