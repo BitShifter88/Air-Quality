@@ -120,8 +120,8 @@ if __name__ == "__main__":
         pm10 = []
         timecodes = []
 
-        now = datetime.datetime.now()
-        nowHour = now.hour()
+        nownow = datetime.datetime.now()
+        nowHour = nownow.hour()
 
         while True:
             values = cmd_query_data()
@@ -138,7 +138,7 @@ if __name__ == "__main__":
             if nowHour != currentHour:
                 break
 
-        fileName = JSON_FILE + now.day() + "-" + now.month() + "-" + now.year() + "-" + now.hour + ".json"
+        fileName = JSON_FILE + nownow.day() + "-" + nownow.month() + "-" + nownow.year() + "-" + nownow.hour + ".json"
 
         jsonData = []
         counter = 0
