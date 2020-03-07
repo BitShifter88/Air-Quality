@@ -138,7 +138,7 @@ if __name__ == "__main__":
             if nowHour != currentHour:
                 break
 
-        fileName = JSON_FILE + now.day() + "-" + now.month() + "-" + now.year() + "-" + now.hour ".json"
+        fileName = JSON_FILE + now.day() + "-" + now.month() + "-" + now.year() + "-" + now.hour + ".json"
 
         jsonData = []
         counter = 0
