@@ -3,7 +3,8 @@
 # "DATASHEET": http://cl.ly/ekot
 # https://gist.github.com/kadamski/92653913a53baf9dd1a8
 from __future__ import print_function
-import serial, struct, sys, time, json, subprocess, datetime
+import serial, struct, sys, time, json, subprocess, datetime, sqlite3, os.path
+
 
 DEBUG = 0
 CMD_MODE = 2
@@ -16,10 +17,7 @@ MODE_ACTIVE = 0
 MODE_QUERY = 1
 PERIOD_CONTINUOUS = 0
 
-JSON_FILE = '/home/pi/share/'
-
-MQTT_HOST = ''
-MQTT_TOPIC = '/weather/particulatematter'
+DATABASE_FILE = 'airQualityDb.db'
 
 ser = serial.Serial()
 ser.port = "/dev/ttyUSB0"
@@ -29,6 +27,23 @@ ser.open()
 ser.flushInput()
 
 byte, data = 0, ""
+
+def createDatabase():
+    con = sqlite3.connect(DATABASE_FILE)
+    cur = con.cursor()
+    cur.execute("CREATE TABLE readings (time integer, pm25 real, pm10 real)")
+    con.commit()
+    con.close()
+
+def insertReading(pm25, pm10):
+    con = sqlite3.connect(DATABASE_FILE)
+    cur = con.cursor()
+    now = int(time.time())
+    query = "INSERT INTO readings VALUES(" + str(now) + "," + str(pm25) + "," + str(pm10) + ")"
+    print(query)
+    cur.execute(query)
+    con.commit()
+    con.close()
 
 def dump(d, prefix=''):
     print(prefix + ' '.join(x.encode('hex') for x in d))
@@ -113,6 +128,10 @@ if __name__ == "__main__":
     cmd_firmware_ver()
     cmd_set_working_period(PERIOD_CONTINUOUS)
     cmd_set_mode(MODE_QUERY);
+    
+    if (not os.path.isfile(DATABASE_FILE)):
+        createDatabase()
+
     while True:
         # cmd_set_sleep(0)
 
@@ -125,30 +144,17 @@ if __name__ == "__main__":
 
         while True:
             values = cmd_query_data()
-            currentNow = datetime.datetime.now()
 
             if values is not None and len(values) == 2:
-                pm25.append(values[0])
-                pm10.append(values[1])
-                timecodes.append(str(currentNow.minute) + ":" + str(currentNow.second))
+                insertReading(values[0], values[1])
                 print("PM2.5: ", values[0], ", PM10: ", values[1])
                 time.sleep(10)
               
-            currentHour = currentNow.hour
-            if nowHour != currentHour:
-                break
+            
+            
+            
 
-        fileName = JSON_FILE + str(nownow.day) + "-" + str(nownow.month) + "-" + str(nownow.year) + "-" + str(nownow.hour) + ".json"
+        
 
-        jsonData = []
-        counter = 0
-        for i in timecodes: 
-            jsonrow = {'pm25': str(pm25[counter]), 'pm10': str(pm10[counter]), 'time': timecodes[counter]}
-            jsonData.append(jsonrow)
-            counter = counter + 1
-
-        print("Saving...")
-        # save it
-        with open(fileName, 'w+') as outfile:
-            json.dump(jsonData, outfile)
-        print("Saved...")
+        
+        
