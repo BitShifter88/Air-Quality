@@ -5,6 +5,8 @@
 from __future__ import print_function
 import serial, struct, sys, time, json, subprocess, datetime, sqlite3, os.path
 
+print(sys.version)
+print(sys.version_info)
 
 DEBUG = 0
 CMD_MODE = 2
@@ -154,8 +156,8 @@ if __name__ == "__main__":
             if (len(pm25) >= 12):
                 pm25Avg = sum(pm25) / len(pm25)
                 pm10Avg = sum(pm10) / len(pm10)
-                pm25.clear()
-                pm10.clear()
+                pm25 = []
+                pm10 = []
                 insertReading(pm25Avg, pm10Avg)
               
             time.sleep(5)
