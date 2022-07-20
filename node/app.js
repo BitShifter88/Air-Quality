@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./../python/airQualityDb.db');
+const db = new sqlite3.Database('/home/pi/Air-Quality/python/airQualityDb.db');
 
 app.listen(port, () => console.log('Server running at http://localhost:' + port));
 

@@ -17,7 +17,7 @@ MODE_ACTIVE = 0
 MODE_QUERY = 1
 PERIOD_CONTINUOUS = 0
 
-DATABASE_FILE = 'airQualityDb.db'
+DATABASE_FILE = '/home/pi/Air-Quality/python/airQualityDb.db'
 
 ser = serial.Serial()
 ser.port = "/dev/ttyUSB0"
@@ -148,7 +148,7 @@ if __name__ == "__main__":
             if values is not None and len(values) == 2:
                 insertReading(values[0], values[1])
                 print("PM2.5: ", values[0], ", PM10: ", values[1])
-                time.sleep(10)
+                time.sleep(60)
               
             
             
