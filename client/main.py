@@ -20,7 +20,11 @@ with urllib.request.urlopen(url) as url:
         pm10y.append(item["pm10"])
         x.append(item["time"])
 
-plt.plot(x, pm25y, label = "PM 2.5")
-plt.plot(x, pm10y, label = "PM 10.0")
-plt.grid()
+fig, ax = plt.subplots(2)
+ax[0].grid()
+ax[0].plot(x, pm25y, label = "PM 2.5")
+
+ax[1].grid()
+ax[1].plot(x, pm10y, label = "PM 10.0")
+#plt.plot(x, pm10y, label = "PM 10.0")
 plt.show()
