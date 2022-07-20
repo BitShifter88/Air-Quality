@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./airQualityDb.db');
+const db = new sqlite3.Database('./../python/airQualityDb.db');
 
 app.listen(port, () => console.log('Server running at http://localhost:' + port));
 
@@ -16,28 +16,25 @@ app.get('/tshirt', (req, res) => {
     });
 });
 
-app.post('/result', (req, res) => {
+app.get('/result', (req, res) => {
 
-    var json = req.body;
-
-    var start = json.start;
-    var end = json.end;
+    var start = req.query.start
+    var end = req.query.end
 
     var query = "SELECT * FROM readings WHERE time >= " + start + " AND time <= " + end;
 
     var result = [];
 
-    db.all(sql, [], (err, rows) => {
+    db.all(query, [], (err, rows) => {
         if (err) {
             throw err;
         }
 
         rows.forEach((row) => {
             result.push(row);
-            console.log(row);
         });
+        res.json(result);
     });
 
-    res.json(result);
     //res.status(200).send({ sucecss:true});
 });
